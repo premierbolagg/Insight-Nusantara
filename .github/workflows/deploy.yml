@@ -21,10 +21,10 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v3
 
-      - name: Build Website (Static HTML)
+      - name: Prepare Public Directory
         run: |
           mkdir -p public
-          cp -r * public/  # Copy semua file ke folder public, kecuali .git dan .github
+          rsync -av --progress ./ public --exclude public --exclude .git --exclude .github
 
       - name: Upload Artifact
         uses: actions/upload-pages-artifact@v3
