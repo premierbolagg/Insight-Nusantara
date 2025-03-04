@@ -1,10 +1,7 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches:
-      - main  # Jalankan saat push ke branch utama
-  workflow_dispatch:  # Memungkinkan menjalankan workflow secara manual
+  deployment_status:  # Trigger workflow secara "dynamic"
 
 permissions:
   contents: read
