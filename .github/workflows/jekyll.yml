@@ -10,7 +10,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # Diperlukan untuk autentikasi saat deploy
+      pages: write
+      id-token: write
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -25,16 +26,40 @@ jobs:
           destination: ./_site
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v3  # Update ke v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: _site
 
-  deploy:
+  report-build-status:
     runs-on: ubuntu-latest
     needs: build
+    permissions:
+      contents: read  # Tambahkan ini agar bisa membaca repository
+    steps:
+      - name: Report Build Status
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const run_id = context.run_id;  // Perbaiki ini
+            github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              sha: context.sha,
+              state: "success",
+              target_url: `https://github.com/${owner}/${repo}/actions/runs/${run_id}`,
+              description: "Build completed successfully!",
+              context: "Build Status"
+            });
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: report-build-status
     permissions:
       pages: write
       id-token: write
     steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4  # Update ke v4
+        uses: actions/deploy-pages@v4
