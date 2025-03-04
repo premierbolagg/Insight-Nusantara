@@ -1,7 +1,7 @@
 name: Build and Deploy Jekyll Site
 
 on:
-  deployment_status:
+  dynamic:
     types: [success]  # Trigger hanya jika deployment sukses
 
 permissions:
