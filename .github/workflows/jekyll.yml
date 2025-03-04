@@ -37,11 +37,12 @@ jobs:
       - name: Report Build Status
         uses: actions/github-script@v6
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}  # Diperlukan untuk update status
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const run_id = context.runId;
-            const sha = context.payload.after;  // Gunakan SHA commit terbaru
+            const sha = context.sha;  // Menggunakan SHA yang lebih aman
 
             github.rest.repos.createCommitStatus({
               owner,
