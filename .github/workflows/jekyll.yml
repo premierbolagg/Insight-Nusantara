@@ -1,10 +1,7 @@
 name: Build and Deploy Jekyll Site
 
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+  deployment_status:  # Menggunakan event dinamis berdasarkan status deployment
 
 permissions:
   contents: read
