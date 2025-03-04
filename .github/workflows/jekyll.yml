@@ -41,12 +41,11 @@ jobs:
       - name: Report Build Status
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}  # Pastikan token tersedia
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const owner = context.repo.owner;
-            const repo = context.repo.repo;
+            const { owner, repo } = context.repo;
+            const sha = context.payload.deployment_status?.sha || context.sha;
             const run_id = context.runId;
-            const sha = context.payload.sha;  # Menggunakan SHA dari payload
 
             github.rest.repos.createCommitStatus({
               owner,
@@ -68,6 +67,9 @@ jobs:
       pages: write
       id-token: write
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4  # Tambahan checkout agar deployment memiliki akses ke kode sumber
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
