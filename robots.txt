@@ -1,0 +1,3 @@
+User-agent: *
+Disallow: 
+Sitemap: https://premierbolagg.github.io/Insight-Nusantara/sitemap.xml
