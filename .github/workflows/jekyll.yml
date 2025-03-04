@@ -26,7 +26,7 @@ jobs:
           destination: ./_site
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v2  # ✅ Gunakan v2 yang stabil
         with:
           path: _site
 
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      contents: read  # Tambahkan ini agar bisa membaca repository
+      contents: read
     steps:
       - name: Report Build Status
         uses: actions/github-script@v6
@@ -43,7 +43,7 @@ jobs:
           script: |
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const run_id = context.run_id;  // Perbaiki ini
+            const run_id = context.run_id;
             github.rest.repos.createCommitStatus({
               owner,
               repo,
@@ -62,4 +62,4 @@ jobs:
       id-token: write
     steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v2  # ✅ Gunakan versi terbaru yang tersedia
