@@ -1,7 +1,8 @@
 name: Build and Deploy Jekyll Site
 
 on:
-  deployment_status:  # Menggunakan event dinamis berdasarkan status deployment
+  deployment_status:
+    types: [success]  # Trigger hanya jika deployment sukses
 
 permissions:
   contents: read
@@ -45,7 +46,7 @@ jobs:
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const run_id = context.runId;
-            const sha = context.sha;  // Menggunakan SHA terbaru
+            const sha = context.payload.sha;  # Menggunakan SHA dari payload
 
             github.rest.repos.createCommitStatus({
               owner,
@@ -60,9 +61,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: report-build-status
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     permissions:
       pages: write
       id-token: write
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
