@@ -1,7 +1,7 @@
 name: Deploy GitHub Pages
 
 on:
-  deployment_status:  # Trigger workflow secara "dynamic"
+  dynamic:  # Trigger workflow secara "dynamic"
 
 permissions:
   contents: read
