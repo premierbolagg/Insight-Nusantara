@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Diperlukan untuk autentikasi saat deploy
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -23,7 +25,7 @@ jobs:
           destination: ./_site
 
       - name: Upload Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3  # Update ke v3
         with:
           path: _site
 
@@ -35,4 +37,4 @@ jobs:
       id-token: write
     steps:
       - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4  # Update ke v4
