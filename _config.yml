@@ -1,6 +1,6 @@
 title: "Insight Nusantara"
 description: "Insight Nusantara - Berita, informasi, dan update terkini dari seluruh dunia"
-url: "https://premierbolagg.github.io/Insight-Nusantara"  # URL utama situs
+url: "https://premierbolagg.github.io"  # URL utama situs
 baseurl: "/Insight-Nusantara"  # Jika situs Anda berada di subfolder GitHub Pages
 
 # Pastikan timezone dan markdown sesuai
