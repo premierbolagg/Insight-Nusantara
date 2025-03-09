@@ -31,37 +31,52 @@ jobs:
           from datetime import datetime
           from feedgen.feed import FeedGenerator
 
-          # Buat RSS feed baru
-          fg = FeedGenerator()
-          fg.title("Insight-Nusantara")
-          fg.link(href="https://premierbolagg.github.io/Insight-Nusantara/")
-          fg.description("Kumpulan Artikel Terbaru 2025")
-          fg.language("id")
+          try:
+              # Buat RSS feed baru
+              fg = FeedGenerator()
+              fg.title("Insight-Nusantara")
+              fg.link(href="https://premierbolagg.github.io/Insight-Nusantara/")
+              fg.description("Kumpulan Artikel Terbaru 2025")
+              fg.language("id")
 
-          # Ambil semua artikel dari folder posts/
-          articles = sorted(glob.glob("posts/*.md"), reverse=True)
+              # Ambil semua artikel dari folder posts/
+              articles = sorted(glob.glob("posts/*.md"), reverse=True)
 
-          for article in articles:
-              with open(article, "r", encoding="utf-8") as f:
-                  lines = f.readlines()
-                  if len(lines) < 2:
-                      continue
-                  title = lines[0].strip("# ").strip()
-                  date_str = lines[1].strip()  # Tanggal di baris kedua
-                  try:
-                      date_obj = datetime.strptime(date_str, "%Y-%m-%d")
-                  except ValueError:
-                      print(f"❌ ERROR: Format tanggal salah di {article}, lewati file ini.")
-                      continue
+              if not articles:
+                  print("⚠️ Tidak ada artikel ditemukan! Pastikan ada file di folder posts/")
+              
+              for article in articles:
+                  with open(article, "r", encoding="utf-8") as f:
+                      lines = f.readlines()
+                      if len(lines) < 2:
+                          print(f"⚠️ Artikel {article} tidak memiliki cukup data, dilewati.")
+                          continue
+                      title = lines[0].strip("# ").strip()
+                      date_str = lines[1].strip()  # Tanggal di baris kedua
+                      try:
+                          date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+                      except ValueError:
+                          print(f"❌ ERROR: Format tanggal salah di {article}, dilewati.")
+                          continue
 
-                  fe = fg.add_entry()
-                  fe.title(title)
-                  fe.link(href=f"https://premierbolagg.github.io/Insight-Nusantara/{article.replace('posts/', '').replace('.md', '.html')}")
-                  fe.pubDate(date_obj)
+                      fe = fg.add_entry()
+                      fe.title(title)
+                      fe.link(href=f"https://premierbolagg.github.io/Insight-Nusantara/{article.replace('posts/', '').replace('.md', '.html')}")
+                      fe.pubDate(date_obj)
 
-          # Simpan ke file XML di root repo
-          fg.rss_file("rssfeed.xml")
-          print("✅ RSS feed berhasil diperbarui!")
+              # Simpan ke file XML di root repo
+              fg.rss_file("rssfeed.xml")
+
+              print("✅ RSS feed berhasil diperbarui!")
+              
+              # Cek apakah file benar-benar dibuat
+              with open("rssfeed.xml", "r", encoding="utf-8") as f:
+                  content = f.read()
+                  print("📄 Isi RSS Feed:\n", content)
+
+          except Exception as e:
+              print(f"❌ ERROR: {e}")
+              exit(1)
           EOF
 
       - name: Commit & Push Changes
