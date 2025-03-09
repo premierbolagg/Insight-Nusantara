@@ -34,7 +34,7 @@ jobs:
           # Buat RSS feed baru
           fg = FeedGenerator()
           fg.title("Insight-Nusantara")
-          fg.link(href="https://premierbolagg.github.io/insight-nusantara/")
+          fg.link(href="https://premierbolagg.github.io/Insight-Nusantara/")
           fg.description("Kumpulan Artikel Terbaru 2025")
           fg.language("id")
 
@@ -48,15 +48,19 @@ jobs:
                       continue
                   title = lines[0].strip("# ").strip()
                   date_str = lines[1].strip()  # Tanggal di baris kedua
-                  date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+                  try:
+                      date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+                  except ValueError:
+                      print(f"❌ ERROR: Format tanggal salah di {article}, lewati file ini.")
+                      continue
 
                   fe = fg.add_entry()
                   fe.title(title)
-                  fe.link(href=f"https://premierbolagg.github.io/insight-nusantara/{article.replace('posts/', '').replace('.md', '.html')}")
+                  fe.link(href=f"https://premierbolagg.github.io/Insight-Nusantara/{article.replace('posts/', '').replace('.md', '.html')}")
                   fe.pubDate(date_obj)
 
-          # Simpan ke file XML
-          fg.rss_file("feed.xml")
+          # Simpan ke file XML di root repo
+          fg.rss_file("rssfeed.xml")
           print("✅ RSS feed berhasil diperbarui!")
           EOF
 
@@ -64,6 +68,6 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "actions@github.com"
-          git add feed.xml
+          git add rssfeed.xml
           git commit -m "🔄 Auto-update RSS feed" || echo "No changes to commit"
-          git push
+          git push origin main
