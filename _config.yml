@@ -12,10 +12,6 @@ plugins:
   - jekyll-sitemap  # Otomatis buat sitemap.xml untuk SEO
   - jekyll-seo-tag  # Tambahkan meta tag SEO (opsional)
 
-# Pastikan rssfeed.xml tidak dihapus oleh Jekyll
-include:
-  - rssfeed.xml
-
 # Exclude file yang tidak perlu untuk mempercepat build
 exclude:
   - README.md
