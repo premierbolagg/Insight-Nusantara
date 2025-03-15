@@ -11,6 +11,9 @@ markdown: kramdown
 plugins:
   - jekyll-sitemap  # Otomatis buat sitemap.xml untuk SEO
   - jekyll-seo-tag  # Tambahkan meta tag SEO (opsional)
+  - jekyll-minifier # Meningkatkan skor Google PageSpeed
+  - jekyll-amp # Halaman lebih cepat di-load di mobile
+  - jekyll-compress-images # Mengompres gambar tanpa kehilangan kualitas
 
 # Exclude file yang tidak perlu untuk mempercepat build
 exclude:
